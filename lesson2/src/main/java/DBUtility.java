@@ -102,7 +102,8 @@ public class DBUtility {
     public ArrayList<String> selectMaker(Statement stmt){
         ArrayList<String> result = new ArrayList<>();
         try {
-            ResultSet rs = stmt.executeQuery("SELECT maker, count (maker) as counter from (SELECT distinct * FROM Product) group by maker having counter >= 2;");
+            ResultSet rs = stmt.executeQuery("select maker, count(maker) as counter from \n" +
+                    "(select DISTINCT * from product) group by maker having counter = 2;");
             while (rs.next()) {
                 result.add(rs.getString("maker"));
             }
@@ -122,27 +123,13 @@ public class DBUtility {
         int maxPrice = 0;
         ArrayList<String> listMakers = new ArrayList<>();
         try {
-            ResultSet rs = stmt.executeQuery("SELECT maker FROM Common WHERE type = 'PC' or type = 'Laptop'");
-            while (rs.next()) {
-//                String currentMaker = rs.getString("maker");
-//                if (!listMakers.contains(currentMaker)) listMakers.add(currentMaker);
-                maxPrice += rs.getInt("price");
-            }
-/*            for (int i = 0; i <listMakers.size() ; i++) {
-                int currentMakerPrice = 0;
-                ArrayList<Integer> listModels = new ArrayList<>();
-                rs = stmt.executeQuery(String.format("SELECT price FROM Common WHERE maker = '%s' and type = 'PC' or maker = '%s' and type = 'Laptop'"
-                        , listMakers.get(i), listMakers.get(i)));
-                while (rs.next()) {
-                    //int currentModel = rs.getInt("model");
-                    int currentPrice =  rs.getInt("price");
-                    //if (!listModels.contains(currentModel)) {
-                    //listModels.add(currentModel);
-                        currentMakerPrice += currentPrice;
-                    //}
-                }
-                if (currentMakerPrice > maxPrice) maxPrice = currentMakerPrice;
-            }*/
+            ResultSet rs = stmt.executeQuery("SELECT MAX(SUMM) as ANS from(select DISTINCT maker, sum(price) as SUMM from \n" +
+                    "(select distinct id, maker, price from PC join Product on pc.model = product.model\n" +
+                    "UNION\n" +
+                    "select distinct id, maker, price from Laptop join Product on Laptop.model = product.model) \n" +
+                    "group by maker);");
+            rs.next();
+            maxPrice = rs.getInt("ANS");
         } catch (SQLException e) {
             e.printStackTrace();
         }

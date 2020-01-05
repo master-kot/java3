@@ -9,7 +9,8 @@ public class CreatorDB {
         Connection conn = DriverManager.getConnection("jdbc:sqlite:homework.db");
         Statement stmt = conn.createStatement();
 
-        //DBUtility dbUtility = new DBUtility();
+        DBUtility dbUtility = new DBUtility();
+
         //CreatorDB.createListOfEquipment(stmt);
         //dbUtility.createPrinterTable(conn, stmt);
         //dbUtility.AddPrinters(stmt);
