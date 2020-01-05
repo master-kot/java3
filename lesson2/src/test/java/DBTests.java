@@ -72,6 +72,4 @@ public class DBTests {
         int max = util.makerWithMaxProceeds(stmt);
         Assert.assertEquals(140000, max);
     }
-
-
 }

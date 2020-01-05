@@ -14,12 +14,18 @@ public class DBUtility {
     */
     void AddPrinters(Statement stmt) {
         try {
-            stmt.execute(String.format("INSERT INTO Printer (model, color, type, price) VALUES (%d, %s, %s, %d);", 1012, "'col'", "'laser'", 20000));
-            stmt.execute(String.format("INSERT INTO Product (maker, model, type) VALUES (%s, %d, %s);", "'HP'", 1012, "'Printer'"));
-            stmt.execute(String.format("INSERT INTO Printer (model, color, type, price) VALUES (%d, %s, %s, %d);", 1010, "'bw'", "'jet'", 5000));
-            stmt.execute(String.format("INSERT INTO Product (maker, model, type) VALUES (%s, %d, %s);", "'Canon'", 1010, "'Printer'"));
-            stmt.execute(String.format("INSERT INTO Printer (model, color, type, price) VALUES (%d, %s, %s, %d);", 1010, "'bw'", "'jet'", 5000));
-            stmt.execute(String.format("INSERT INTO Product (maker, model, type) VALUES (%s, %d, %s);", "'Canon'", 1010, "'Printer'"));
+            stmt.execute(String.format("INSERT INTO Printer (model, color, type, price) VALUES (%d, %s, %s, %d);"
+                    , 1012, "'col'", "'laser'", 20000));
+            stmt.execute(String.format("INSERT INTO Product (maker, model, type) VALUES (%s, %d, %s);"
+                    , "'HP'", 1012, "'Printer'"));
+            stmt.execute(String.format("INSERT INTO Printer (model, color, type, price) VALUES (%d, %s, %s, %d);"
+                    , 1010, "'bw'", "'jet'", 5000));
+            stmt.execute(String.format("INSERT INTO Product (maker, model, type) VALUES (%s, %d, %s);"
+                    , "'Canon'", 1010, "'Printer'"));
+            stmt.execute(String.format("INSERT INTO Printer (model, color, type, price) VALUES (%d, %s, %s, %d);"
+                    , 1010, "'bw'", "'jet'", 5000));
+            stmt.execute(String.format("INSERT INTO Product (maker, model, type) VALUES (%s, %d, %s);"
+                    , "'Canon'", 1010, "'Printer'"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -31,8 +37,10 @@ public class DBUtility {
      */
     void AddPrinters(Statement stmt, Printer printer) {
         try {
-            stmt.execute(String.format("INSERT INTO Printer (model, color, type, price) VALUES (%d, '%s', '%s', %d);", printer.getModel(), printer.getColor(), printer.getType(), printer.getPrice()));
-            stmt.execute(String.format("INSERT INTO Product (maker, model, type) VALUES ('%s', %d, '%s');", printer.getMaker(), printer.getModel(), printer.getType()));
+            stmt.execute(String.format("INSERT INTO Printer (model, color, type, price) VALUES (%d, '%s', '%s', %d);"
+                    , printer.getModel(), printer.getColor(), printer.getType(), printer.getPrice()));
+            stmt.execute(String.format("INSERT INTO Product (maker, model, type) VALUES ('%s', %d, '%s');"
+                    , printer.getMaker(), printer.getModel(), printer.getType()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -40,12 +48,14 @@ public class DBUtility {
 
     // TODO: 16.12.2019
     /**
-     * Создает таблицу продуктов и принтеров если они не были созданы
+     * Создает таблицы продуктов и принтеров, если они не были созданы и добавляет в них все принтеры
      */
     public void createPrinterTable(Connection con, Statement  stmt) {
         try {
-            stmt.execute("CREATE TABLE IF NOT EXISTS Printer(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, model INTEGER, color TEXT, type TEXT, price INTEGER);");
+            stmt.execute("CREATE TABLE IF NOT EXISTS Printer(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE," +
+                    " model INTEGER, color TEXT, type TEXT, price INTEGER);");
             stmt.execute("CREATE TABLE IF NOT EXISTS Product (maker TEXT, model INTEGER, type TEXT);");
+            AddPrinters(stmt);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -57,12 +67,10 @@ public class DBUtility {
      */
     public ArrayList<String> selectExpensivePC(Statement stmt) {
         ArrayList<String> result = new ArrayList<>();
-        ResultSet rs = null;
         try {
-            rs = stmt.executeQuery("SELECT model FROM PC WHERE price > 15000");
+            ResultSet rs = stmt.executeQuery("SELECT distinct model FROM PC WHERE price > 15000");
         while (rs.next()) {
-            String currentPrinter = rs.getString("model");
-            if (!result.contains(currentPrinter)) result.add(currentPrinter);
+            result.add(rs.getString("model"));
         }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -76,9 +84,8 @@ public class DBUtility {
      */
     public ArrayList<Integer> selectQuickLaptop(Statement stmt){
         ArrayList<Integer> result = new ArrayList<>();
-        ResultSet rs = null;
         try {
-            rs = stmt.executeQuery("SELECT id FROM Laptop WHERE speed > 2500");
+            ResultSet rs = stmt.executeQuery("SELECT id FROM Laptop WHERE speed > 2500");
             while (rs.next()) {
                 result.add(rs.getInt("id"));
             }
@@ -94,17 +101,10 @@ public class DBUtility {
      */
     public ArrayList<String> selectMaker(Statement stmt){
         ArrayList<String> result = new ArrayList<>();
-        ArrayList<String> pcMakers = new ArrayList<>();
-        ResultSet rs = null;
         try {
-            rs = stmt.executeQuery("SELECT maker FROM Product WHERE type = 'PC'");
+            ResultSet rs = stmt.executeQuery("SELECT maker, count (maker) as counter from (SELECT distinct * FROM Product) group by maker having counter >= 2;");
             while (rs.next()) {
-                pcMakers.add(rs.getString("maker"));
-            }
-            rs = stmt.executeQuery("SELECT maker FROM Product WHERE type = 'Laptop'");
-            while (rs.next()) {
-                String currentMaker = rs.getString("maker");
-                if (pcMakers.contains(currentMaker) & !result.contains(currentMaker)) result.add(currentMaker);
+                result.add(rs.getString("maker"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -117,22 +117,22 @@ public class DBUtility {
      * Метод должен вернуть максимальную среди всех произодителей суммарную стоимость всех изделий типов ноутбук или компьютер,
      * произведенных одним производителем. Необходимо объединить таблицы продуктов ноутбуков и компьютеров
      * и отгрупировать по сумме прайсов после чего выбрать максимум или сделать любым другим способом
-     * Метод возвращает: 140 000
      */
     public int makerWithMaxProceeds(Statement stmt){
         int maxPrice = 0;
         ArrayList<String> listMakers = new ArrayList<>();
-        ResultSet rs = null;
         try {
-            rs = stmt.executeQuery("SELECT maker FROM Common WHERE type = 'PC' or type = 'Laptop'");
+            ResultSet rs = stmt.executeQuery("SELECT maker FROM Common WHERE type = 'PC' or type = 'Laptop'");
             while (rs.next()) {
-                String currentMaker = rs.getString("maker");
-                if (!listMakers.contains(currentMaker)) listMakers.add(currentMaker);
+//                String currentMaker = rs.getString("maker");
+//                if (!listMakers.contains(currentMaker)) listMakers.add(currentMaker);
+                maxPrice += rs.getInt("price");
             }
-            for (int i = 0; i <listMakers.size() ; i++) {
+/*            for (int i = 0; i <listMakers.size() ; i++) {
                 int currentMakerPrice = 0;
                 ArrayList<Integer> listModels = new ArrayList<>();
-                rs = stmt.executeQuery(String.format("SELECT price FROM Common WHERE maker = '%s' and type = 'PC' or maker = '%s' and type = 'Laptop'", listMakers.get(i), listMakers.get(i)));
+                rs = stmt.executeQuery(String.format("SELECT price FROM Common WHERE maker = '%s' and type = 'PC' or maker = '%s' and type = 'Laptop'"
+                        , listMakers.get(i), listMakers.get(i)));
                 while (rs.next()) {
                     //int currentModel = rs.getInt("model");
                     int currentPrice =  rs.getInt("price");
@@ -142,7 +142,7 @@ public class DBUtility {
                     //}
                 }
                 if (currentMakerPrice > maxPrice) maxPrice = currentMakerPrice;
-            }
+            }*/
         } catch (SQLException e) {
             e.printStackTrace();
         }
