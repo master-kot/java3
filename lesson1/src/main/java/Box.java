@@ -47,6 +47,7 @@ public class Box<T extends Fruit> {
         otherBox.weight = 0;
     }
 
+    //TODO
     public float getWeight() {
         return weight;
     }

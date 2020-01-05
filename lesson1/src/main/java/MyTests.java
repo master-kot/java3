@@ -1,7 +1,3 @@
-
-import java.util.ArrayList;
-import java.util.Collection;
-
 public class MyTests {
     public static void main(String[] args) {
         Box<Apple> appleBox = new Box<>();
