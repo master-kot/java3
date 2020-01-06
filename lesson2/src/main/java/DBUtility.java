@@ -14,16 +14,13 @@ public class DBUtility {
     */
     void AddPrinters(Statement stmt) {
         try {
-            stmt.execute(String.format("INSERT INTO Printer (model, color, type, price) VALUES (%d, %s, %s, %d);"
-                    , 1012, "'col'", "'laser'", 20000));
+            stmt.execute("INSERT INTO Printer (model, color, type, price) VALUES (1012, 'col', 'laser', 20000);");
+            stmt.execute("INSERT INTO Printer (model, color, type, price) VALUES (1010, 'bw', 'jet', 5000);");
+            stmt.execute("INSERT INTO Printer (model, color, type, price) VALUES (1010, 'bw', 'jet', 5000);");
             stmt.execute(String.format("INSERT INTO Product (maker, model, type) VALUES (%s, %d, %s);"
                     , "'HP'", 1012, "'Printer'"));
-            stmt.execute(String.format("INSERT INTO Printer (model, color, type, price) VALUES (%d, %s, %s, %d);"
-                    , 1010, "'bw'", "'jet'", 5000));
             stmt.execute(String.format("INSERT INTO Product (maker, model, type) VALUES (%s, %d, %s);"
                     , "'Canon'", 1010, "'Printer'"));
-            stmt.execute(String.format("INSERT INTO Printer (model, color, type, price) VALUES (%d, %s, %s, %d);"
-                    , 1010, "'bw'", "'jet'", 5000));
             stmt.execute(String.format("INSERT INTO Product (maker, model, type) VALUES (%s, %d, %s);"
                     , "'Canon'", 1010, "'Printer'"));
         } catch (SQLException e) {
@@ -52,8 +49,7 @@ public class DBUtility {
      */
     public void createPrinterTable(Connection con, Statement  stmt) {
         try {
-            stmt.execute("CREATE TABLE IF NOT EXISTS Printer(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE," +
-                    " model INTEGER, color TEXT, type TEXT, price INTEGER);");
+            stmt.execute("CREATE TABLE IF NOT EXISTS Printer(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, model INTEGER, color TEXT, type TEXT, price INTEGER);");
             stmt.execute("CREATE TABLE IF NOT EXISTS Product (maker TEXT, model INTEGER, type TEXT);");
             AddPrinters(stmt);
         } catch (SQLException e) {
@@ -102,8 +98,8 @@ public class DBUtility {
     public ArrayList<String> selectMaker(Statement stmt){
         ArrayList<String> result = new ArrayList<>();
         try {
-            ResultSet rs = stmt.executeQuery("select maker, count(maker) as counter from \n" +
-                    "(select DISTINCT * from product) group by maker having counter = 2;");
+            ResultSet rs = stmt.executeQuery("SELECT maker, COUNT(maker) AS counter FROM " +
+                    "(SELECT DISTINCT * FROM product WHERE type IN ('PC', 'Laptop')) GROUP BY maker HAVING counter = 2;");
             while (rs.next()) {
                 result.add(rs.getString("maker"));
             }
