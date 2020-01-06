@@ -8,7 +8,8 @@ public class TaskRunner implements Runnable {
     volatile int cnt;
     volatile int inc;
     static volatile int iter = 0;
-	/** этот список будет проверяться на предмет синхронизации данных, 
+	/**
+     * этот список будет проверяться на предмет синхронизации данных,
      * а именно на соответствие: [1, 2, 3, 1, 2, 3, 1, 2, 3....]
 	 */
     static volatile LinkedList<String> list = new LinkedList<>();
