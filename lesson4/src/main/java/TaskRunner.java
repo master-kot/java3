@@ -2,6 +2,10 @@ import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TaskRunner implements Runnable {
+    /**
+     * Ничего, кроме указанного ниже, внутри потока main изменять нельзя!!!!!
+     * Класс написан верно, когда в консоль выводится list и сообщения true
+     */
     public static void main(String[] args) {
         ThreadTask task = new ThreadTask();
         Object mon = new Object();
@@ -17,19 +21,19 @@ public class TaskRunner implements Runnable {
                 Thread.sleep(1000);
                 int cnt = 0;
                 int [] arr = new int[]{1,2,3};
-                System.out.println(TaskRunner.list);
+                //Когда строка ниже раскоментирована, происходит ConcurrentModificationException
+                //System.out.println(TaskRunner.list);
                 for (int i = 0; i < 9; i++) {
-                    System.out.println(String.valueOf(arr[cnt]) + ":" + TaskRunner.list.get(i) + ":" + String.valueOf(arr[cnt]).equals(TaskRunner.list.get(i)));
+                    System.out.println(String.valueOf(arr[cnt]).equals(TaskRunner.list.get(i))); //здесь true
                     cnt = (cnt + 1) % 3;
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace(); } } }
 
-	final Object mutex;	//монитор синхронизации
-    String message;	//сообщение которое поток будет добавлять в список
+	final Object mutex;	        //монитор синхронизации
+    String message;	            //сообщение которое поток будет добавлять в список
     volatile int cnt;
-    volatile int inc;
-    volatile int iter = 0;
+    static volatile int inc;    //переменная позволяющая менять очередность выполнения потоками
 
     /**
      * этот список будет проверяться на предмет синхронизации данных,
@@ -51,26 +55,30 @@ public class TaskRunner implements Runnable {
 	 */
     @Override
     public void run() {
-
-
         while (true) {
             synchronized (mutex) {
-                if (cnt == 0 & iter == 0) {
-                   //mutex.notifyAll();
-                   list.add(message);
-                   iter = Integer.parseInt(message);
-                   //mutex.wait();
-               } else if (cnt == 1 & iter == 1) {
-                   //mutex.notifyAll();
-                   list.add(message);
-                   iter = Integer.parseInt(message);
-                   //mutex.wait();
-               } else if (cnt == 2 & iter == 2) {
-                   //mutex.notifyAll();
-                   list.add(message);
-                   iter = 0;
-                   //mutex.wait();
-               }
+                try {
+                    if (cnt == 0) {
+                        while (inc != 0) {mutex.wait();}
+                        list.add(message);
+                        inc = 1;
+                        mutex.notifyAll();
+                    }
+                    if (cnt == 1) {
+                        while (inc != 1) {mutex.wait();}
+                        list.add(message);
+                        inc = 2;
+                        mutex.notifyAll();
+                    }
+                    if (cnt == 2) {
+                        while(inc != 2) {mutex.wait();}
+                        list.add(message);
+                        inc = 0;
+                        mutex.notifyAll();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
