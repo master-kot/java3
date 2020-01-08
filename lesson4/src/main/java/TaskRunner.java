@@ -28,27 +28,24 @@ public class TaskRunner implements Runnable {
 	 */
     @Override
     public void run() {
-        while (true) {
+        for (int i = 0; i < 9; i++) {
             synchronized (mutex) {
                 try {
                     if (cnt == 0) {
                         while (inc != 0) {mutex.wait();}
                         list.add(message);
-                        System.out.println("Thread 0 added message!");
                         inc = 1;
                         mutex.notifyAll();
                     }
                     if (cnt == 1) {
                         while (inc != 1) {mutex.wait();}
                         list.add(message);
-                        System.out.println("Thread 1 added message!");
                         inc = 2;
                         mutex.notifyAll();
                     }
                     if (cnt == 2) {
                         while(inc != 2) {mutex.wait();}
                         list.add(message);
-                        System.out.println("Thread 2 added message!");
                         inc = 0;
                         mutex.notifyAll();
                     }

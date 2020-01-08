@@ -19,7 +19,7 @@ public class MyTest {
                 int cnt = 0;
                 int [] arr = new int[]{1,2,3};
                 //Когда строка ниже раскоментирована, происходит ConcurrentModificationException
-                //System.out.println(TaskRunner.list);
+                System.out.println(TaskRunner.list);
                 for (int i = 0; i < 9; i++) {
                     System.out.println(String.valueOf(arr[cnt]).equals(TaskRunner.list.get(i))); //здесь true
                     cnt = (cnt + 1) % 3;
