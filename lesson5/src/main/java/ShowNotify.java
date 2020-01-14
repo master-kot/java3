@@ -5,11 +5,11 @@ public class ShowNotify {
     }
 
     public static void startRace () {
-        System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка началась!!!");
+        System.err.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка началась!!!");
     }
 
     public static void finishRace () {
-        System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка закончилась!!!");
+        System.err.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка закончилась!!!");
     }
 
     public static void getingPrepared (Car car) {
@@ -25,7 +25,7 @@ public class ShowNotify {
     }
 
     public static void waitingStage (Car car, Stage stage) {
-        System.out.println(car.getName() + " готовится к этапу(ждет): " + stage.getDescription());
+        System.err.println(car.getName() + " готовится к этапу(ждет): " + stage.getDescription());
     }
 
     public static void finishedStage (Car car, Stage stage) {
