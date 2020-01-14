@@ -3,7 +3,7 @@ public class MainClass {
     public static final int CARS_COUNT = 4;
 
     public static void main(String[] args) {
-        System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Подготовка!!!");
+        ShowNotify.readyRace();
         Race race = new Race(new Road(60), new Tunnel(), new Road(40));
         Car[] cars = new Car[CARS_COUNT];
         for (int i = 0; i < cars.length; i++) {
@@ -12,7 +12,7 @@ public class MainClass {
         for (int i = 0; i < cars.length; i++) {
             new Thread(cars[i]).start();
         }
-        System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка началась!!!");
-        System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка закончилась!!!");
+        ShowNotify.startRace();
+        ShowNotify.finishRace();
     }
 }

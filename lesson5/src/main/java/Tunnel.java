@@ -7,16 +7,16 @@ public class Tunnel extends Stage {
     public void go(Car c) {
         try {
             try {
-                System.out.println(c.getName() + " готовится к этапу(ждет): " + description);
-                System.out.println(c.getName() + " начал этап: " + description);
+                ShowNotify.waitingStage(c, this);
+                ShowNotify.startedStage(c, this);
                 Thread.sleep(length / c.getSpeed() * 1000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                ShowNotify.showExeption(e.getMessage());
             } finally {
-                System.out.println(c.getName() + " закончил этап: " + description);
+                ShowNotify.finishedStage(c, this);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            ShowNotify.showExeption(e.getMessage());
         }
     }
 }
