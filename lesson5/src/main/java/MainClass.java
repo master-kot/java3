@@ -9,10 +9,12 @@ public class MainClass {
         for (int i = 0; i < cars.length; i++) {
             cars[i] = new Car(race, 20 + (int) (Math.random() * 10));
         }
-        for (int i = 0; i < cars.length; i++) {
-            new Thread(cars[i]).start();
+        for (Car car : cars) {
+            new Thread(car).start();
         }
         ShowNotify.startRace();
+        //TODO
+        //стартовать в одно время
         ShowNotify.finishRace();
     }
 }

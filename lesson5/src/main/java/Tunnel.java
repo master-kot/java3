@@ -9,6 +9,8 @@ public class Tunnel extends Stage {
             try {
                 ShowNotify.waitingStage(c, this);
                 ShowNotify.startedStage(c, this);
+                //TODO
+                //Semaphore CAR COUNT
                 Thread.sleep(length / c.getSpeed() * 1000);
             } catch (InterruptedException e) {
                 ShowNotify.showExeption(e.getMessage());
