@@ -1,28 +1,32 @@
 import java.util.concurrent.Semaphore;
 
 public class Tunnel extends Stage {
-    Semaphore smp;
+    //Блокировшик входа потоков сверх определенного их числа
+    private final Semaphore smp;
 
-    public Tunnel() {
+    public Tunnel(int maxCarsCount) {
         this.length = 80;
         this.description = "Тоннель " + length + " метров";
-        smp = new Semaphore(2);
+        this.smp = new Semaphore(maxCarsCount);
     }
 
-    //TODO
-    //Разрешить вход в тоннель не более 2 потокам одновременно
+    /**
+     *
+     * Разрешить вход в тоннель не более половине участников одновременно
+     */
     @Override
     public void go(Car c) {
+        ShowNotify.waitingStage(c, this);
         try {
-            ShowNotify.waitingStage(c, this);
+            //вход в секцию блокировки одновременного входа
             smp.acquire();
-            Thread.sleep(50);
             ShowNotify.startedStage(c, this);
             Thread.sleep(length / c.getSpeed() * 1000);
         } catch (Exception e) {
             ShowNotify.showExeption(e.getMessage());
         } finally {
             ShowNotify.finishedStage(c, this);
+            //выход из секции блокировки
             smp.release();
         }
     }
