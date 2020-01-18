@@ -32,7 +32,7 @@ public class ForTests {
     /**
      * Написать любых два  метода и тесты для них
      */
-    public int[] bubbleSort(int[] data) {
+    public int[] arrayBubbleSort(int[] data) {
         for (int i = 0; i < data.length; i++) {
             for (int j = 0; j < data.length - i - 1; j++) {
                 if (data[j] > data[j + 1]) {

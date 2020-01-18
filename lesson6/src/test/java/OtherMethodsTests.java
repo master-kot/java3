@@ -25,7 +25,7 @@ public class OtherMethodsTests {
 
     @Test
     public void testOfBubbleSort() {
-        Assert.assertEquals("[0, 1, 2, 3, 4, 5, 6, 7]", Arrays.toString(ft.bubbleSort(arr)));
+        Assert.assertEquals("[0, 1, 2, 3, 4, 5, 6, 7]", Arrays.toString(ft.arrayBubbleSort(arr)));
     }
 
     @Test
