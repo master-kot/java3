@@ -14,7 +14,8 @@ public class ForTests {
         return data.stream().sorted().collect(Collectors.toList());
     }
 
-    /** Написать тесты и переработавть метод поиска binarySearch члена массива
+    /**
+     * Написать тесты и переработавть метод поиска binarySearch члена массива
      * среди определенного количества членов отсортированного массива
      */
     public int binarySearch(int [] data, int key, int l, int r) {
@@ -26,5 +27,29 @@ public class ForTests {
         if(r == l + 1 && data[r] != key) return -1;
         if(data[mid] > key) return binarySearch(data, key, l, mid);
         return binarySearch(data, key, mid, r);
+    }
+
+    /**
+     * Написать любых два  метода и тесты для них
+     */
+    public int[] bubbleSort(int[] data) {
+        for (int i = 0; i < data.length; i++) {
+            for (int j = 0; j < data.length - i - 1; j++) {
+                if (data[j] > data[j + 1]) {
+                    int tmp = data[j];
+                    data[j] = data[j + 1];
+                    data[j + 1] = tmp;
+                }
+            }
+        }
+        return data;
+    }
+
+    public int[] addElementToArray(int[] data, int index, int value) {
+        int[] tmp = new int[data.length + 1];
+        System.arraycopy(data, 0, tmp, 0, index);
+        System.arraycopy(data, index, tmp, index + 1, data.length - index);
+        tmp[index] = value;
+        return tmp;
     }
 }
