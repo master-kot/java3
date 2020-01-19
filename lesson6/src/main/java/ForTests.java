@@ -1,10 +1,29 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.*;
 import java.util.stream.Collectors;
 
 public class ForTests {
+    private static final Logger newLogger = Logger.getLogger(ForTests.class.getName());
+
+    static {
+        newLogger.setLevel(Level.ALL);
+        try {
+            newLogger.addHandler(new FileHandler("ForTestsLog.txt", true));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        newLogger.getHandlers()[0].setLevel(Level.INFO);
+        newLogger.getHandlers()[0].setFormatter(new Formatter() {
+            @Override
+            public String format(LogRecord record) {
+                Date date = new Date();
+                return date + " [" + record.getLevel() + "] " + record.getSourceClassName() + "."
+                        + record.getSourceMethodName() + ": " + record.getMessage() + "\n";
+            }
+        });
+    }
 
     //TODO
     /**
@@ -15,12 +34,19 @@ public class ForTests {
     }
 
     /**
-     * Написать тесты и переработавть метод поиска binarySearch члена массива
+     * Написать тесты и переработать метод поиска binarySearch члена массива
      * среди определенного количества членов отсортированного массива
      */
     public int binarySearch(int [] data, int key, int l, int r) {
-        if(r >= data.length) r = data.length -1;
-        if(l < 0) l = 0;
+        if(r >= data.length) {
+            r = data.length -1;
+            newLogger.log(Level.WARNING,"The value of parameter r = " + r + " is more than the length of array");
+        }
+        if(l < 0) {
+            l = 0;
+            newLogger.log(Level.WARNING,"The value of parameter l = " + l +
+                    " is less than 0, so the value of l was changed to 0");
+        }
         int mid = (l + r) / 2;
         if(data[mid] == key) return mid;
         if(l == r) return -1;
@@ -32,11 +58,11 @@ public class ForTests {
     /**
      * Написать любых два  метода и тесты для них
      */
-    public int[] arrayBubbleSort(int[] data) {
+    public Integer[] arrayBubbleSort(Integer[] data) {
         for (int i = 0; i < data.length; i++) {
             for (int j = 0; j < data.length - i - 1; j++) {
                 if (data[j] > data[j + 1]) {
-                    int tmp = data[j];
+                    Integer tmp = data[j];
                     data[j] = data[j + 1];
                     data[j + 1] = tmp;
                 }
@@ -45,8 +71,13 @@ public class ForTests {
         return data;
     }
 
-    public int[] addElementToArray(int[] data, int index, int value) {
-        int[] tmp = new int[data.length + 1];
+    public Integer[] addElementToArray(Integer[] data, int index, int value) {
+        if (index > data.length || index < 0) {
+            newLogger.log(Level.WARNING,"The value of parameter index is " + index +
+                    ". It's out of bounds of the array, so the element has not been added into the array");
+            return data;
+        }
+        Integer[] tmp = new Integer[data.length + 1];
         System.arraycopy(data, 0, tmp, 0, index);
         System.arraycopy(data, index, tmp, index + 1, data.length - index);
         tmp[index] = value;

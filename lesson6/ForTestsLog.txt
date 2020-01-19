@@ -1,0 +1,12 @@
+Sun Jan 19 15:48:16 MSK 2020 [WARNING] ForTests.binarySearch: The value of parameter r = 7 is more than the length of array
+Sun Jan 19 15:48:16 MSK 2020 [WARNING] ForTests.addElementToArray: The value of parameter index is 9. It's out of bounds of the array, so the element has not been added into the array
+Sun Jan 19 15:48:16 MSK 2020 [WARNING] ForTests.binarySearch: The value of parameter r = 7 is more than the length of array
+Sun Jan 19 15:48:16 MSK 2020 [WARNING] ForTests.addElementToArray: The value of parameter index is -1. It's out of bounds of the array, so the element has not been added into the array
+Sun Jan 19 15:48:16 MSK 2020 [WARNING] ForTests.binarySearch: The value of parameter r = 7 is more than the length of array
+Sun Jan 19 15:48:16 MSK 2020 [WARNING] ForTests.binarySearch: The value of parameter l = 0 is less than 0, so the value of l was changed to 0
+Sun Jan 19 15:48:51 MSK 2020 [WARNING] ForTests.binarySearch: The value of parameter r = 7 is more than the length of array
+Sun Jan 19 15:48:51 MSK 2020 [WARNING] ForTests.addElementToArray: The value of parameter index is 9. It's out of bounds of the array, so the element has not been added into the array
+Sun Jan 19 15:48:51 MSK 2020 [WARNING] ForTests.binarySearch: The value of parameter r = 7 is more than the length of array
+Sun Jan 19 15:48:51 MSK 2020 [WARNING] ForTests.addElementToArray: The value of parameter index is -1. It's out of bounds of the array, so the element has not been added into the array
+Sun Jan 19 15:48:51 MSK 2020 [WARNING] ForTests.binarySearch: The value of parameter r = 7 is more than the length of array
+Sun Jan 19 15:48:51 MSK 2020 [WARNING] ForTests.binarySearch: The value of parameter l = 0 is less than 0, so the value of l was changed to 0
