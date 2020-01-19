@@ -34,6 +34,10 @@ public class AllTests {
         this.resultBubbleSort = resultBubbleSort;
     }
 
+    /**
+     * Считаю что это наиболее лучший вариант параметризованного запуска,
+     * здесь можно использовать параметры любых классов
+     */
     @Parameterized.Parameters
     public static Object[][] data() {
         return new Object[][]{

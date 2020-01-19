@@ -7,6 +7,11 @@ import java.util.stream.Collectors;
 public class ForTests {
     private static final Logger newLogger = Logger.getLogger(ForTests.class.getName());
 
+    /**
+     * Придумал использовать статик секцию, которая позволяет настраивать логгер,
+     * без нее при тестировании создается несколько разных хэндлеров
+     * и куча лог-файлов, что очень дико выглядит
+     */
     static {
         newLogger.setLevel(Level.ALL);
         try {
