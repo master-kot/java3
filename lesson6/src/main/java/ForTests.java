@@ -55,7 +55,10 @@ public class ForTests {
         int mid = (l + r) / 2;
         if(data[mid] == key) return mid;
         if(l == r) return -1;
-        if(r == l + 1 && data[r] != key) return -1;
+        if(r == l + 1) {
+            if (data[r] == key) return r;
+            else return -1;
+        }
         if(data[mid] > key) return binarySearch(data, key, l, mid);
         return binarySearch(data, key, mid, r);
     }
