@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public class TestsInvoker {
-
+    // TODO: 23/01/2020
     public void invokeTests(Class c) throws InvocationTargetException, IllegalAccessException {
-        // TODO: 18/11/2019
+
     }
 
     public static void main(String[] args) throws InvocationTargetException, IllegalAccessException {

@@ -30,19 +30,22 @@ public class Tests {
         }
     }
 
+    // TODO: 23/01/2020
     @Test(priority = 3)
     public void mulTest(){
-        // TODO: 18/11/2019  
+
     }
 
+    // TODO: 23/01/2020
     @Test(priority = 4)
     public void divTest(){
-        // TODO: 18/11/2019  
+
     }
 
+    // TODO: 23/01/2020
     @Test(priority = 5)
     public void modTest(){
-        // TODO: 18/11/2019  
+
     }
 
     @After
