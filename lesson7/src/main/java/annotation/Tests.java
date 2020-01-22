@@ -24,7 +24,7 @@ public class Tests {
     @Test(priority = 2)
     public void subTest(){
         System.out.println("Sub test");
-        if (util.sum() == 13){
+        if (util.sub() == 13){
             System.out.println("OK");
         } else {
             System.out.println("WRONG");
@@ -57,7 +57,7 @@ public class Tests {
     @Test(priority = 5)
     public void modTest(){
         System.out.println("Mod test");
-        if (util.div() == 0){
+        if (util.mod() == 0){
             System.out.println("OK");
         } else {
             System.out.println("WRONG");
