@@ -23,39 +23,33 @@ public class TestsInvoker {
 
     // TODO: 23/01/2020
     public static void invokeTests(Class c) throws InvocationTargetException, InstantiationException, IllegalAccessException {
-        LinkedList<Method> methods = new LinkedList<>();
-        Comparator<Method> comparator = new Comparator<Method>() {
-            public int compare(Method o1, Method o2) {
-                return o1.getAnnotation(Test.class).priority() - (o2.getAnnotation(Test.class).priority());
-            }
-        };
-        int numberOfMethodBefore = -1;
-        int numberOfMethodAfter = -1;
+        ArrayList<Method> methods = new ArrayList<>();
+        Method methodBefore = null;
+        Method methodAfter = null;
 
-        Method[] listOfMethods = c.getMethods();
-        for (int i =0; i < listOfMethods.length; i++) {
-            if (listOfMethods[i].isAnnotationPresent(Before.class)) {
-                if (numberOfMethodBefore == -1) {
-                    numberOfMethodBefore = i;
+        for (Method listOfMethods : c.getMethods()) {
+            if (listOfMethods.isAnnotationPresent(Before.class)) {
+                if (methodBefore == null) {
+                    methodBefore = listOfMethods;
                 } else throw new RuntimeException("Before annotation must be only one");
             }
-            if (listOfMethods[i].isAnnotationPresent(Test.class)) {
-                methods.add(listOfMethods[i]);
+            if (listOfMethods.isAnnotationPresent(Test.class)) {
+                methods.add(listOfMethods);
             }
-            if (listOfMethods[i].isAnnotationPresent(After.class)) {
-                if (numberOfMethodAfter == -1) {
-                    numberOfMethodAfter = i;
+            if (listOfMethods.isAnnotationPresent(After.class)) {
+                if (methodAfter == null) {
+                    methodAfter = listOfMethods;
                 } else throw new RuntimeException("After annotation must be only one");
             }
         }
-        methods.sort(comparator);
+        methods.sort(Comparator.comparingInt(o -> o.getAnnotation(Test.class).priority()));
 
         Tests myTests = (Tests)c.newInstance();
-        listOfMethods[numberOfMethodBefore].invoke(myTests);
-        for (int i = 0; i < methods.size(); i++) {
-            methods.get(i).invoke(myTests);
+        if (methodBefore != null) methodBefore.invoke(myTests);
+        for (Method method : methods) {
+            method.invoke(myTests);
         }
-        listOfMethods[numberOfMethodAfter].invoke(myTests);
+        if (methodAfter != null) methodAfter.invoke(myTests);
     }
 
     public static void main(String[] args) throws InvocationTargetException, IllegalAccessException, InstantiationException {
